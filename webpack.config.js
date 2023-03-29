@@ -3,39 +3,60 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ESLintPlugin = require('eslint-webpack-plugin');
+const { dirname } = require("path");
+// const isProduction = process.env.NODE_ENV == "production";
 
-const isProduction = process.env.NODE_ENV == "production";
-
-const stylesHandler = MiniCssExtractPlugin.loader;
-
-const config = {
-  entry: "./src/index.js",
+module.exports = {
+	mode: "development",
+	entry: "./index.js",
   output: {
-    path: path.resolve(__dirname, "dist"),
+		path: path.resolve(__dirname, "dist"),
+
   },
-  devServer: {
-    open: true,
-    host: "localhost",
-  },
-  plugins: [
+
+	plugins: [
+		new ESLintPlugin({
+			files: path.resolve(__dirname, "./src/js")
+
+		}),
     new HtmlWebpackPlugin({
-      template: "index.html",
+			template: "./src/index.html",
+			filename: './index.html'
     }),
 
-    new MiniCssExtractPlugin(),
+		new MiniCssExtractPlugin(
+			{
+				filename: '[name].css',
+				chunkFilename: '[id].css'
+			}
+		),
 
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
-  module: {
-    rules: [
+	module: {
+		rules: [
+			{
+				test: /\.(js)$/i,
+				exclude: /node_modules/,
+				use: {
+					loader: "babel-loader",
+				}
+			},
+			{
+				test: /\.html$/,
+				use: [
+					{
+						loader: 'html-loader',
+					},
+				],
+			},
       {
-        test: /\.(js|jsx)$/i,
-        loader: "babel-loader",
-      },
-      {
-        test: /\.css$/i,
-        use: [stylesHandler, "css-loader"],
+				test: /\.css$/i,
+				use: [
+					MiniCssExtractPlugin.loader, 'css-loader',
+				],
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
@@ -48,11 +69,11 @@ const config = {
   },
 };
 
-module.exports = () => {
-  if (isProduction) {
-    config.mode = "production";
-  } else {
-    config.mode = "development";
-  }
-  return config;
-};
+// module.exports = () => {
+//   if (isProduction) {
+//     config.mode = "production";
+//   } else {
+//     config.mode = "development";
+//   }
+//   return config;
+// };

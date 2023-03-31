@@ -21,7 +21,7 @@ describe("It's will been test a 'class Bowerman' #1", () => {
 		defence: 25,
 		health: 100,
 		level: 1,
-		name: "Magus",
-		type: "Bowman",
+		name: 'Magus',
+		type: 'Bowman',
 	});
 });

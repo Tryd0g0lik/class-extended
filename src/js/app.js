@@ -21,29 +21,31 @@ export function cortedHeroes(h) {
 		}
 		return h;
 	} catch (e) {
-		console.log(e.message);
 		return `${(e.message)}`;
 	}
 }
 
-class Character {
-	constructor(name, type, attack, defence, health = 100, level = 1) {
-		this.name = (() => {
-			if (name.length >= 2 && name.lrngth <= 10) {
-				return name;
-			}
-			throw new Error("Количество символов должно быть'name' от 2 до 10");
-		})();
-		this.type = (() => {
-			if (type in ['Bowman', 'Swordsman', 'Magician', 'Daemon', 'Undead', 'Zombie']) {
-				return type;
-			}
-			throw new Error('Заявленный тип не соответствует ни одному из имеющихся: Bowman, Swordsman, Magician, Daemon, Undead, Zombie');
-		})();
-		this.health = health;
-		this.level = level;
+// HOMEWORKs
+export class Character {
+	constructor(name, type, attack, defence) {
+		this.type = type;
+		this.checks(name);
+		this.health = 100;
+		this.level = 1;
 		this.attack = attack;
 		this.defence = defence;
+	}
+
+	async checks(n) {
+		await (() => {
+			const re = /^\W*[^\d{1}\s{1}/\\_=.]/i;
+			if (typeof n === 'string' && n.length >= 2 && n.length <= 10
+				&& re.test(n) === true) {
+				this.name = n;
+			} else {
+				throw new Error(`Cо свойством {name: '${n}'} что-то не верно!`);
+			}
+		})();
 	}
 }
 
@@ -56,6 +58,8 @@ export class Bowerman extends Character {
 	}
 }
 
+// зАКОММЕНТИРОВАть ОДНОТИПНЫЕ функции для работы с тестированием
+
 export class Swordsman extends Character {
 	constructor(name) {
 		super(name);
@@ -64,6 +68,7 @@ export class Swordsman extends Character {
 		super.defence = 10;
 	}
 }
+
 export class Magician extends Character {
 	constructor(name) {
 		super(name);
@@ -72,6 +77,7 @@ export class Magician extends Character {
 		super.defence = 40;
 	}
 }
+
 export class Daemon extends Character {
 	constructor(name) {
 		super(name);
@@ -80,6 +86,7 @@ export class Daemon extends Character {
 		super.defence = 40;
 	}
 }
+
 export class Undead extends Character {
 	constructor(name) {
 		super(name);
@@ -88,6 +95,7 @@ export class Undead extends Character {
 		super.defence = 25;
 	}
 }
+
 export class Zombie extends Character {
 	constructor(name) {
 		super(name);

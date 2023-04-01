@@ -47,11 +47,13 @@ export class Character {
 		})();
 		await (() => {
 			const typesList = ['Bowman', 'Swordsman', 'Magician', 'Undead', 'Zombie', 'Daemon'];
-			if (t in typesList) {
-				this.type = t;
-			} else {
-				throw new Error(`Упс! Данный 'type' ${t} не предусмотрен приложением!`);
+			for (let i = 0; i < typesList.length; i += 1) {
+				if (t === typesList[i]) {
+					this.type = t;
+					return undefined;
+				}
 			}
+			throw new Error(`Упс! Данный {type: '${t}'} не предусмотрен приложением!`);
 		})();
 	}
 }
